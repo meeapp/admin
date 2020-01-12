@@ -2409,7 +2409,7 @@ var UtilsService = /** @class */ (function () {
             });
         }
         else if (mode == "Product") {
-            dataInfo["Product/" + ("" + id) + "/active"] = false;
+            dataInfo["Product/" + ("" + id)] = null;
             addUpdateData.update(dataInfo).then(function (result) {
                 _this.loadingStop();
             })

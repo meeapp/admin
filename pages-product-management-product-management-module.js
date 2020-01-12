@@ -178,7 +178,9 @@ var ProductManagementPage = /** @class */ (function () {
         });
     };
     ProductManagementPage.prototype.showDetail = function (data) {
-        this.showModalEditProduct(data.ev, data.row._row.data);
+        if (data.ev.toElement.outerHTML.includes("Tên sản phẩm")) {
+            this.showModalEditProduct(data.ev, data.row._row.data);
+        }
     };
     ProductManagementPage.prototype.showAdd = function (ev) {
         this.showModalEditProduct(ev, {});
