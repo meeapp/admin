@@ -1340,6 +1340,10 @@ var AppComponent = /** @class */ (function () {
         this.selectedPath = '';
         this.pages = [
             {
+                title: 'Đơn hàng',
+                url: this.constantsService.PATH_ORDER_MANAGEMENT
+            },
+            {
                 title: 'Quản lí Kho',
                 url: this.constantsService.PATH_KHO_MANAGEMENT
             },
@@ -1374,10 +1378,6 @@ var AppComponent = /** @class */ (function () {
             {
                 title: 'Thông báo',
                 url: this.constantsService.PATH_NOTIFY_MANAGEMENT
-            },
-            {
-                title: 'Đơn hàng',
-                url: this.constantsService.PATH_ORDER_MANAGEMENT
             },
             {
                 title: 'Thống kê',
@@ -1807,6 +1807,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_fire_database__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/fire/database */ "./node_modules/@angular/fire/database/index.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+
 
 
 
@@ -1859,8 +1861,13 @@ var UtilsService = /** @class */ (function () {
         this.platform = platform;
         this.storage = storage;
         this.db = db;
+        this.observerCategoryLoaded = new rxjs__WEBPACK_IMPORTED_MODULE_15__["Subject"];
+        this.observerProductLoaded = new rxjs__WEBPACK_IMPORTED_MODULE_15__["Subject"];
+        this.observerProductKhoLoaded = new rxjs__WEBPACK_IMPORTED_MODULE_15__["Subject"];
         this.listProductDiscount = {};
         this.listCodediscount = {};
+        this.listProductKho = [];
+        this.listProductKhoObj = {};
         this.listCategory = {};
         this.lstCategory = [];
         this.listProduct = [];
@@ -1873,6 +1880,7 @@ var UtilsService = /** @class */ (function () {
         this.listEvent = [];
         this.listUserChat = [];
         this.columnsTableProduct = [];
+        this.columnsTableProductKho = [];
         this.EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
         this.EXCEL_EXTENSION = '.xlsx';
         this.chatStatus = false;
@@ -1883,10 +1891,9 @@ var UtilsService = /** @class */ (function () {
         this.countChat = 0;
         this.getListCategory();
         this.getListProduct();
-        this.getListTradeMark();
-        this.getListSubCategory();
         this.getListQuyCach();
         this.getListDiscount();
+        this.getListProductKho();
         this.getBGChat();
         this.storage.get('APP_AUTHENTICATION').then(function (result) {
             if (result) {
@@ -1972,33 +1979,6 @@ var UtilsService = /** @class */ (function () {
             }
         });
     };
-    UtilsService.prototype.getListSubCategory = function () {
-        var _this = this;
-        var listSubCategory = this.db.list("SubCategory/");
-        listSubCategory.valueChanges().subscribe(function (subCate) {
-            _this.listSubCategory = [];
-            if (subCate) {
-                for (var index = 0; index < subCate.length; index++) {
-                    var element = subCate[index];
-                    _this.listSubCategory.push(element);
-                    _this.listSubCategoryObject[element.id] = element;
-                }
-            }
-        });
-    };
-    UtilsService.prototype.getListTradeMark = function () {
-        var _this = this;
-        var listTrade = this.db.list("TradeMark/");
-        listTrade.valueChanges().subscribe(function (trade) {
-            _this.listTrademark = [];
-            if (trade) {
-                for (var index = 0; index < trade.length; index++) {
-                    var element = trade[index];
-                    _this.listTrademark.push(element.id);
-                }
-            }
-        });
-    };
     UtilsService.prototype.getListDiscount = function () {
         var _this = this;
         var listDiscount = this.db.list("Events/");
@@ -2072,6 +2052,16 @@ var UtilsService = /** @class */ (function () {
                     _this.createTableProductColumns(listCate, listSet);
                 }
             }
+            _this.listProduct.sort(function (a, b) {
+                if (a["Tên sản phẩm"] < b["Tên sản phẩm"]) {
+                    return -1;
+                }
+                if (a["Tên sản phẩm"] > b["Tên sản phẩm"]) {
+                    return 1;
+                }
+                return 0;
+            });
+            _this.observerProductLoaded.next(true);
         });
     };
     UtilsService.prototype.getListCategory = function () {
@@ -2080,29 +2070,54 @@ var UtilsService = /** @class */ (function () {
         listCate.valueChanges().subscribe(function (category) {
             _this.listCategory = {};
             _this.lstCategory = [];
+            _this.listSubCategory = [];
+            _this.listSubCategoryObject = {};
             if (category) {
                 for (var index = 0; index < category.length; index++) {
                     var element = category[index];
                     _this.listCategory[element.title] = { id: element.id, value: element.value, title: element.title, active: element.active };
                     _this.listCategory[element.id] = { id: element.id, value: element.value, title: element.title, active: element.active };
+                    _this.listCategory[element.value] = { id: element.id, value: element.value, title: element.title, active: element.active };
                     _this.lstCategory.push({ id: element.id, value: element.value, title: element.title, active: element.active });
                     if (element.listMenu) {
                         for (var keySub1 in element.listMenu) {
                             var elementSub1 = element.listMenu[keySub1];
                             _this.listCategory[elementSub1.title] = { id: elementSub1.id, value: elementSub1.value, title: elementSub1.title, active: elementSub1.active };
                             _this.listCategory[elementSub1.id] = { id: elementSub1.id, value: elementSub1.value, title: elementSub1.title, active: elementSub1.active };
+                            _this.listCategory[elementSub1.value] = { id: elementSub1.id, value: elementSub1.value, title: elementSub1.title, active: elementSub1.active };
                             _this.lstCategory.push({ id: elementSub1.id, value: elementSub1.value, title: elementSub1.title, active: elementSub1.active });
                             if (elementSub1.listMenu) {
                                 for (var keySub2 in elementSub1.listMenu) {
                                     var elementSub2 = elementSub1.listMenu[keySub2];
                                     _this.listCategory[elementSub2.title] = { id: elementSub2.id, value: elementSub2.value, title: elementSub2.title, active: elementSub2.active };
                                     _this.listCategory[elementSub2.id] = { id: elementSub2.id, value: elementSub2.value, title: elementSub2.title, active: elementSub2.active };
+                                    _this.listCategory[elementSub2.value] = { id: elementSub2.id, value: elementSub2.value, title: elementSub2.title, active: elementSub2.active };
                                     _this.lstCategory.push({ id: elementSub2.id, value: elementSub2.value, title: elementSub2.title, active: elementSub2.active });
+                                    if (element.value != "7") {
+                                        _this.listSubCategory.push(elementSub2);
+                                        _this.listSubCategoryObject[elementSub2.id] = elementSub2;
+                                    }
+                                }
+                            }
+                            else {
+                                if (element.value != "7") {
+                                    _this.listSubCategory.push(elementSub1);
+                                    _this.listSubCategoryObject[elementSub1.id] = elementSub1;
                                 }
                             }
                         }
                     }
+                    if (element.value == "7") {
+                        _this.listTrademark = [];
+                        if (element.listMenu) {
+                            for (var keySub1 in element.listMenu) {
+                                var elementSub1 = element.listMenu[keySub1];
+                                _this.listTrademark.push({ id: elementSub1.id, value: elementSub1.value, title: elementSub1.title, active: elementSub1.active });
+                            }
+                        }
+                    }
                 }
+                _this.observerCategoryLoaded.next(true);
             }
         });
     };
@@ -2360,6 +2375,120 @@ var UtilsService = /** @class */ (function () {
             }
         ]);
     };
+    UtilsService.prototype.createTableColumnKho = function (listQuyCach) {
+        var _this = this;
+        var columnSet = [];
+        for (var index = 0; index < listQuyCach.length; index++) {
+            var columns = {};
+            columns["title"] = listQuyCach[index];
+            columns["align"] = "center";
+            columns["columns"] = [];
+            if (index == 0) {
+                columns["columns"].push({
+                    title: "Giá", field: "Price", width: 80, formatter: function (cell, formatterParams) {
+                        var value = cell.getValue() ? cell.getValue() : '';
+                        return "<span style='color:lightseagreen; font-weight:bold;'>" + value + "</span>";
+                    }
+                });
+                columns["columns"].push({
+                    title: "SL", field: "SL", width: 80, formatter: function (cell, formatterParams) {
+                        var value = cell.getValue() ? cell.getValue() : '';
+                        return "<span style='color:tomato; font-weight:bold;'>" + value + "</span>";
+                    }
+                });
+            }
+            else {
+                columns["columns"].push({
+                    title: "Giá", field: "Price_" + index, width: 80, formatter: function (cell, formatterParams) {
+                        var value = cell.getValue() ? cell.getValue() : '';
+                        return "<span style='color:lightseagreen; font-weight:bold;'>" + value + "</span>";
+                    }
+                });
+                columns["columns"].push({
+                    title: "SL", field: "SL_" + index, width: 80, formatter: function (cell, formatterParams) {
+                        var value = cell.getValue() ? cell.getValue() : '';
+                        return "<span style='color:tomato; font-weight:bold;'>" + value + "</span>";
+                    }
+                });
+            }
+            columnSet.push(columns);
+        }
+        this.columnsTableProductKho = [
+            { title: "ID", field: "IDProduct", align: "left", width: 100, visible: false },
+            { title: "Barcode", field: "Barcode", align: "left", width: 150 },
+            { title: "Tên sản phẩm", field: "Tên sản phẩm", align: "left", width: 300 },
+            { title: "Phân loại", field: "Phân loại", align: "left", width: 100 }
+        ].concat(columnSet, [
+            {
+                title: "Ngày sản xuất", field: "NSX", align: "left", width: 130, formatter: function (cell) {
+                    return _this.getDateFromStringDD(cell.getValue(), "ddd MMM D YYYY HH:mm:ss Z");
+                }
+            },
+            {
+                title: "Hạn sử dụng", field: "HSD", align: "left", width: 130, formatter: function (cell) {
+                    return _this.getDateFromStringDD(cell.getValue(), "ddd MMM D YYYY HH:mm:ss Z");
+                }
+            },
+            {
+                title: "Ngày hết hạn", field: "Ngày hết hạn", align: "left", width: 130, formatter: function (cell) {
+                    return _this.getDateFromStringDD(cell.getValue(), "ddd MMM D YYYY HH:mm:ss Z");
+                }
+            },
+            { title: "Ngày nhập kho", field: "Ngày nhập kho", align: "left", width: 136, formatter: function (cell) {
+                    return _this.getDateFromStringDD(cell.getValue(), "YYYY/M/D");
+                }
+            },
+            {
+                width: 100, formatter: "buttonCross", align: "center", title: "Xóa sản phẩm", headerSort: false, cellClick: function (e, cell) {
+                    _this.presentAlertConfirmDelete(cell.getRow()._row.data.Barcode, "Thông báo xóa sản phẩm", ' <strong>Sản phẩm sẽ bị xóa</strong>', "ProductDetails");
+                    event.stopPropagation();
+                }
+            }
+        ]);
+    };
+    UtilsService.prototype.getListProductKho = function () {
+        var _this = this;
+        var listProDetails = this.db.list("Kho/");
+        listProDetails.valueChanges().subscribe(function (product) {
+            _this.listProductKho = [];
+            _this.listProductKhoObj = {};
+            var listQC = [];
+            if (product) {
+                for (var index = 0; index < product.length; index++) {
+                    var element = product[index];
+                    var indexQC = 0;
+                    for (var key in element.QC) {
+                        var elementQC = element.QC[key];
+                        if (indexQC == 0) {
+                            element["Price"] = elementQC["Price"];
+                            element["SL"] = elementQC["SL"];
+                        }
+                        else {
+                            element["Price_" + indexQC] = elementQC["Price"];
+                            element["SL_" + indexQC] = elementQC["SL"];
+                        }
+                        if (listQC.indexOf(key) == -1) {
+                            listQC.push(key);
+                        }
+                        indexQC++;
+                    }
+                    _this.listProductKho.push(element);
+                    _this.listProductKhoObj[element.Barcode] = element;
+                }
+            }
+            _this.listProductKho.sort(function (a, b) {
+                if (a["Ngày nhập kho"] > b["Ngày nhập kho"]) {
+                    return -1;
+                }
+                if (a["Ngày nhập kho"] < b["Ngày nhập kho"]) {
+                    return 1;
+                }
+                return 0;
+            });
+            _this.createTableColumnKho(listQC);
+            _this.observerProductKhoLoaded.next(true);
+        });
+    };
     UtilsService.prototype.presentAlertConfirmDelete = function (id, header, message, mode) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var alert;
@@ -2513,6 +2642,9 @@ var UtilsService = /** @class */ (function () {
     UtilsService.prototype.generateNewKey = function () {
         return this.db.list("/").push(undefined).key;
     };
+    UtilsService.prototype.generateDateYYYYMMDD = function (value) {
+        return value.getFullYear() + "/" + (value.getMonth() + 1) + "/" + value.getDate();
+    };
     UtilsService.prototype.generateDateDDMMYYY = function (value) {
         return value.getDate() + "/" + (value.getMonth() + 1) + "/" + value.getFullYear();
     };
@@ -2606,6 +2738,23 @@ var UtilsService = /** @class */ (function () {
                 _this.showError(err);
             });
         });
+    };
+    UtilsService.prototype.xoa_dau = function (str) {
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+        str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+        str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+        str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+        str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+        str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+        str = str.replace(/Đ/g, "D");
+        return str;
     };
     UtilsService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
