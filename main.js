@@ -2050,18 +2050,18 @@ var UtilsService = /** @class */ (function () {
                         }
                     }
                     _this.createTableProductColumns(listCate, listSet);
+                    _this.listProduct.sort(function (a, b) {
+                        if (a["Tên sản phẩm"] < b["Tên sản phẩm"]) {
+                            return -1;
+                        }
+                        if (a["Tên sản phẩm"] > b["Tên sản phẩm"]) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    _this.observerProductLoaded.next(true);
                 }
             }
-            _this.listProduct.sort(function (a, b) {
-                if (a["Tên sản phẩm"] < b["Tên sản phẩm"]) {
-                    return -1;
-                }
-                if (a["Tên sản phẩm"] > b["Tên sản phẩm"]) {
-                    return 1;
-                }
-                return 0;
-            });
-            _this.observerProductLoaded.next(true);
         });
     };
     UtilsService.prototype.getListCategory = function () {

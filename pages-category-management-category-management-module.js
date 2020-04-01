@@ -120,7 +120,6 @@ __webpack_require__.r(__webpack_exports__);
 
 var CategoryManagementPage = /** @class */ (function () {
     function CategoryManagementPage(popoverController, categoryService, utilsService, appValueService, translate) {
-        var _this = this;
         this.popoverController = popoverController;
         this.categoryService = categoryService;
         this.utilsService = utilsService;
@@ -129,16 +128,13 @@ var CategoryManagementPage = /** @class */ (function () {
         this.lstCategory = [];
         this.listFilter = [];
         this.heightTable = "775";
-        if (this.utilsService.lstCategory.length > 0) {
-            this.loadData();
-        }
-        else {
-            this.utilsService.observerCategoryLoaded.subscribe(function () {
-                _this.loadData();
-            });
-        }
     }
     CategoryManagementPage.prototype.ngOnInit = function () {
+        var _this = this;
+        this.loadData();
+        this.utilsService.observerCategoryLoaded.subscribe(function () {
+            _this.loadData();
+        });
     };
     CategoryManagementPage.prototype.ionViewDidEnter = function () {
         this.heightTable = this.contentSearch.el.offsetHeight;

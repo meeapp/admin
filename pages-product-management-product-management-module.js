@@ -120,7 +120,6 @@ __webpack_require__.r(__webpack_exports__);
 
 var ProductManagementPage = /** @class */ (function () {
     function ProductManagementPage(popoverController, productService, utilsService, appValueService, translate) {
-        var _this = this;
         this.popoverController = popoverController;
         this.productService = productService;
         this.utilsService = utilsService;
@@ -130,16 +129,13 @@ var ProductManagementPage = /** @class */ (function () {
         this.searchInfo = {};
         this.filterValue = "";
         this.lstProduct = [];
-        if (this.utilsService.listProduct.length > 0) {
-            this.loadData();
-        }
-        else {
-            this.utilsService.observerProductLoaded.subscribe(function () {
-                _this.loadData();
-            });
-        }
     }
     ProductManagementPage.prototype.ngOnInit = function () {
+        var _this = this;
+        this.loadData();
+        this.utilsService.observerProductLoaded.subscribe(function () {
+            _this.loadData();
+        });
     };
     ProductManagementPage.prototype.ionViewDidEnter = function () {
         this.heightTable = this.contentSearch.el.offsetHeight;
@@ -153,6 +149,8 @@ var ProductManagementPage = /** @class */ (function () {
             tableDataTemp.push(element);
         }
         this.lstProduct = tableDataTemp;
+        console.log("loadData");
+        console.log(this.lstProduct);
         this.utilsService.loadingStop();
     };
     ProductManagementPage.prototype.filterContent = function (ev) {

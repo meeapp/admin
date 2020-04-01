@@ -116,7 +116,6 @@ __webpack_require__.r(__webpack_exports__);
 
 var KhoManagementPage = /** @class */ (function () {
     function KhoManagementPage(popoverController, utilsService, appValueService, translate) {
-        var _this = this;
         this.popoverController = popoverController;
         this.utilsService = utilsService;
         this.appValueService = appValueService;
@@ -124,16 +123,13 @@ var KhoManagementPage = /** @class */ (function () {
         this.filterValue = "";
         this.lstProduct = [];
         this.heightTable = "775";
-        if (this.utilsService.listProductKho.length > 0) {
-            this.loadData();
-        }
-        else {
-            this.utilsService.observerProductKhoLoaded.subscribe(function () {
-                _this.loadData();
-            });
-        }
     }
     KhoManagementPage.prototype.ngOnInit = function () {
+        var _this = this;
+        this.loadData();
+        this.utilsService.observerProductKhoLoaded.subscribe(function () {
+            _this.loadData();
+        });
     };
     KhoManagementPage.prototype.ionViewDidEnter = function () {
         this.heightTable = this.contentSearch.el.offsetHeight;
