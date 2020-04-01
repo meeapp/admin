@@ -2475,18 +2475,18 @@ var UtilsService = /** @class */ (function () {
                     _this.listProductKho.push(element);
                     _this.listProductKhoObj[element.Barcode] = element;
                 }
+                _this.listProductKho.sort(function (a, b) {
+                    if (a["Ngày nhập kho"] > b["Ngày nhập kho"]) {
+                        return -1;
+                    }
+                    if (a["Ngày nhập kho"] < b["Ngày nhập kho"]) {
+                        return 1;
+                    }
+                    return 0;
+                });
+                _this.createTableColumnKho(listQC);
+                _this.observerProductKhoLoaded.next(true);
             }
-            _this.listProductKho.sort(function (a, b) {
-                if (a["Ngày nhập kho"] > b["Ngày nhập kho"]) {
-                    return -1;
-                }
-                if (a["Ngày nhập kho"] < b["Ngày nhập kho"]) {
-                    return 1;
-                }
-                return 0;
-            });
-            _this.createTableColumnKho(listQC);
-            _this.observerProductKhoLoaded.next(true);
         });
     };
     UtilsService.prototype.presentAlertConfirmDelete = function (id, header, message, mode) {
