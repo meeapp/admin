@@ -164,7 +164,6 @@ var ProductManagementPage = /** @class */ (function () {
                 var element = this.utilsService.listProduct[index];
                 this.lstProduct.push(element);
             }
-            console.log(this.lstProduct);
         }
     };
     ProductManagementPage.prototype.showModalImport = function (ev) {

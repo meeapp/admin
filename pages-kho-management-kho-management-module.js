@@ -142,8 +142,6 @@ var KhoManagementPage = /** @class */ (function () {
             var element = this.utilsService.listProductKho[index];
             tableDataTemp.push(element);
         }
-        console.log(this.utilsService.listProductKho);
-        console.log(tableDataTemp);
         this.lstProduct = tableDataTemp;
         this.utilsService.loadingStop();
     };
