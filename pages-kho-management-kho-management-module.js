@@ -135,8 +135,12 @@ var KhoManagementPage = /** @class */ (function () {
     }
     KhoManagementPage.prototype.ngOnInit = function () {
     };
+    KhoManagementPage.prototype.ionViewDidEnter = function () {
+        this.heightTable = this.contentSearch.el.offsetHeight;
+    };
     KhoManagementPage.prototype.loadData = function () {
         this.utilsService.loadingStart();
+        this.lstProduct = [];
         var tableDataTemp = [];
         for (var index = 0; index < this.utilsService.listProductKho.length; index++) {
             var element = this.utilsService.listProductKho[index];

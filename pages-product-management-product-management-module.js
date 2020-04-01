@@ -141,8 +141,12 @@ var ProductManagementPage = /** @class */ (function () {
     }
     ProductManagementPage.prototype.ngOnInit = function () {
     };
+    ProductManagementPage.prototype.ionViewDidEnter = function () {
+        this.heightTable = this.contentSearch.el.offsetHeight;
+    };
     ProductManagementPage.prototype.loadData = function () {
         this.utilsService.loadingStart();
+        this.lstProduct = [];
         var tableDataTemp = [];
         for (var index = 0; index < this.utilsService.listProduct.length; index++) {
             var element = this.utilsService.listProduct[index];
