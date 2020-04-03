@@ -149,8 +149,6 @@ var ProductManagementPage = /** @class */ (function () {
             tableDataTemp.push(element);
         }
         this.lstProduct = tableDataTemp;
-        console.log("loadData");
-        console.log(this.lstProduct);
         this.utilsService.loadingStop();
     };
     ProductManagementPage.prototype.filterContent = function (ev) {
