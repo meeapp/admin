@@ -142,6 +142,7 @@ var NewsManagementPage = /** @class */ (function () {
                             id: "editNewsModal",
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { rowProduct: row },
                             cssClass: "edit-news-popover"
                         })];

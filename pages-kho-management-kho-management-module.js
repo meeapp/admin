@@ -211,6 +211,7 @@ var KhoManagementPage = /** @class */ (function () {
                             id: "editDetailsProductModal",
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { rowProduct: row },
                             cssClass: "edit-detail-product-popover"
                         })];

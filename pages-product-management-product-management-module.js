@@ -176,6 +176,7 @@ var ProductManagementPage = /** @class */ (function () {
                             component: src_app_components_modal_import_csv_modal_import_csv_component__WEBPACK_IMPORTED_MODULE_4__["ModalImportCsvComponent"],
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { mode: "product", sheetName: "DanhMuc" },
                             cssClass: "import-csv-popover"
                         })];

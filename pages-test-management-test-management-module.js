@@ -142,6 +142,7 @@ var TestManagementPage = /** @class */ (function () {
                             id: "editTestModal",
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { rowProduct: row },
                             cssClass: "edit-test-popover"
                         })];

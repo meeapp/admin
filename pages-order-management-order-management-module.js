@@ -142,6 +142,7 @@ var OrderManagementPage = /** @class */ (function () {
                             id: "editOrderModal",
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { rowProduct: row },
                             cssClass: "edit-order-popover"
                         })];

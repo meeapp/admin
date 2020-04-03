@@ -189,6 +189,7 @@ var CategoryManagementPage = /** @class */ (function () {
                             id: "editCategoryModal",
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { rowProduct: row, parentValue: parent },
                             cssClass: "edit-category-popover"
                         })];
@@ -210,6 +211,7 @@ var CategoryManagementPage = /** @class */ (function () {
                             component: src_app_components_modal_import_csv_modal_import_csv_component__WEBPACK_IMPORTED_MODULE_4__["ModalImportCsvComponent"],
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { mode: "category", sheetName: "Category" },
                             cssClass: "import-csv-popover"
                         })];

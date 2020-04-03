@@ -142,6 +142,7 @@ var NotifyManagementPage = /** @class */ (function () {
                             id: "editNotifyModal",
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { rowProduct: row },
                             cssClass: "edit-notify-popover"
                         })];

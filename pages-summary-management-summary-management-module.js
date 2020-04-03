@@ -136,6 +136,7 @@ var SummaryManagementPage = /** @class */ (function () {
                             component: src_app_components_modal_summary_detail_modal_summary_detail_component__WEBPACK_IMPORTED_MODULE_6__["ModalSummaryDetailComponent"],
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { rowProduct: row },
                             cssClass: "edit-category-popover"
                         })];

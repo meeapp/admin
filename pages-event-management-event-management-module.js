@@ -142,6 +142,7 @@ var EventManagementPage = /** @class */ (function () {
                             id: "editEventModal",
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { rowProduct: row },
                             cssClass: "edit-event-popover"
                         })];

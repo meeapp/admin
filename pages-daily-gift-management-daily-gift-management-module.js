@@ -142,6 +142,7 @@ var DailyGiftManagementPage = /** @class */ (function () {
                             id: "editDailyFreeGiftModal",
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { rowProduct: row },
                             cssClass: "edit-daily-free-gift-popover"
                         })];
