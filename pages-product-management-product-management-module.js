@@ -231,6 +231,7 @@ var ProductManagementPage = /** @class */ (function () {
                             id: "editProductModal",
                             event: ev,
                             translucent: true,
+                            backdropDismiss: false,
                             componentProps: { rowProduct: row },
                             cssClass: "edit-product-popover"
                         })];
